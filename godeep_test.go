@@ -12,12 +12,12 @@ import (
 
 // Test files
 const (
-	testContainerWAV       = "samples/container.wav"
-	testSecretFile         = "samples/secret.txt"
-	testOutputWAV          = "samples/output.wav"
-	testExtractedFile      = "samples/extracted_secret.txt"
-	testOutputWAVNoPass    = "samples/output_no_pass.wav"
-	testExtractedFileNoPass = "samples/extracted_no_pass.txt"
+	testContainerWAV       = "tests/container.wav"
+	testSecretFile         = "tests/secret.md"
+	testOutputWAV          = "tests/output.wav"
+	testExtractedFile      = "tests/extracted_secret.txt"
+	testOutputWAVNoPass    = "tests/output_no_pass.wav"
+	testExtractedFileNoPass = "tests/extracted_no_pass.txt"
 	testPassword           = "testpassword"
 )
 
@@ -26,7 +26,7 @@ func generateKey() []byte {
 	return pbkdf2.Key([]byte(testPassword), []byte("GoDeepSalt"), 100000, 32, sha256.New)
 }
 
-// ✅ **Test 1: Embed using `utils/` (With Password)**
+// **Test 1: Embed using `utils/` (With Password)**
 func TestEmbedWithPassword(t *testing.T) {
 	key := generateKey()
 	err := utils.Embed(testSecretFile, testOutputWAV, testContainerWAV, key, true, true)
@@ -39,7 +39,7 @@ func TestEmbedWithPassword(t *testing.T) {
 	}
 }
 
-// ✅ **Test 2: Extract using `utils/` (With Password)**
+// **Test 2: Extract using `utils/` (With Password)**
 func TestExtractWithPassword(t *testing.T) {
 	key := generateKey()
 	err := utils.Extract(testOutputWAV, testExtractedFile, key, true, true)
@@ -66,7 +66,7 @@ func TestExtractWithPassword(t *testing.T) {
 	}
 }
 
-// ✅ **Test 3: Embed using `utils/` (No Password)**
+// **Test 3: Embed using `utils/` (No Password)**
 func TestEmbedNoPassword(t *testing.T) {
 	err := utils.Embed(testSecretFile, testOutputWAVNoPass, testContainerWAV, nil, false, true)
 	if err != nil {
@@ -78,7 +78,7 @@ func TestEmbedNoPassword(t *testing.T) {
 	}
 }
 
-// ✅ **Test 4: Extract using `utils/` (No Password)**
+// **Test 4: Extract using `utils/` (No Password)**
 func TestExtractNoPassword(t *testing.T) {
 	err := utils.Extract(testOutputWAVNoPass, testExtractedFileNoPass, nil, false, true)
 	if err != nil {
@@ -104,7 +104,7 @@ func TestExtractNoPassword(t *testing.T) {
 	}
 }
 
-// ✅ **Test 5: CLI - Embed (With Password)**
+// **Test 5: CLI - Embed (With Password)**
 func TestCLI_EmbedWithPassword(t *testing.T) {
 	cmd := exec.Command("./godeep", "embed", "-i", testSecretFile, "-o", testOutputWAV, "-c", testContainerWAV, "-p", testPassword)
 	err := cmd.Run()
@@ -117,7 +117,7 @@ func TestCLI_EmbedWithPassword(t *testing.T) {
 	}
 }
 
-// ✅ **Test 6: CLI - Extract (With Password)**
+// **Test 6: CLI - Extract (With Password)**
 func TestCLI_ExtractWithPassword(t *testing.T) {
 	cmd := exec.Command("./godeep", "extract", "-c", testOutputWAV, "-o", testExtractedFile, "-p", testPassword)
 	err := cmd.Run()
@@ -144,7 +144,7 @@ func TestCLI_ExtractWithPassword(t *testing.T) {
 	}
 }
 
-// ✅ **Test 7: CLI - Embed (No Password)**
+// **Test 7: CLI - Embed (No Password)**
 func TestCLI_EmbedNoPassword(t *testing.T) {
 	cmd := exec.Command("./godeep", "embed", "-i", testSecretFile, "-o", testOutputWAVNoPass, "-c", testContainerWAV, "--noencryption")
 	err := cmd.Run()
@@ -157,7 +157,7 @@ func TestCLI_EmbedNoPassword(t *testing.T) {
 	}
 }
 
-// ✅ **Test 8: CLI - Extract (No Password)**
+// **Test 8: CLI - Extract (No Password)**
 func TestCLI_ExtractNoPassword(t *testing.T) {
 	cmd := exec.Command("./godeep", "extract", "-c", testOutputWAVNoPass, "-o", testExtractedFileNoPass, "--noencryption")
 	err := cmd.Run()
